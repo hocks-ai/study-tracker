@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tahosin Study Tracker - Premium Dashboard</title>
+    <title>Tahosin Study Tracker - Professional Dashboard</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;600;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,29 +13,28 @@
 
     <style>
         :root {
-            --primary: #39ff14;      /* Neon Green */
-            --primary-glow: #39ff14aa;
-            --accent: #00ff9d;
-            --success: #00ff80;
-            --danger: #ff2d55;
-            --warning: #ffd000;
-            --bg: #0a0a0a;
-            --card-bg: rgba(15, 15, 15, 0.7);
-            --card-border: rgba(57, 255, 20, 0.3);
-            --text-main: #e0e0e0;
-            --text-muted: #888888;
+            --primary: #663399;
+            --secondary: #1a1a1a;
+            --accent: #00c7b7;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
         }
 
-        html { background: linear-gradient(135deg, #000000, #0f1a0f); min-height: 100vh; }
-        html.dark { background: linear-gradient(135deg, #000000, #0a0f0a); }
+        html { background-color: #f1f5f9; }
+        html.dark { background-color: #0f172a; }
 
         body.dark {
-            --bg: #000000;
-            --card-bg: rgba(10, 15, 10, 0.8);
-            --text-main: #ffffff;
-            --text-muted: #aaaaaa;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
         }
-
+        
         body.dark .sub-box, body.dark .mini-box { color: #ffffff; }
         
         body.dark #paper-perc-text,
@@ -223,7 +222,7 @@
         }
         .dropdown-content button:last-child { border-bottom: none; }
         .dropdown-content button:hover {
-            background-color: rgba(57, 255, 20, 0.1);
+            background-color: rgba(37, 99, 235, 0.1);
             color: var(--primary);
         }
         .dropdown-content .logout-item:hover {
@@ -418,8 +417,8 @@
         .leader-info { display: flex; align-items: center; gap: 10px; }
         .leader-img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; }
         .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-        .online { background: var(--success); box-shadow: 0 0 5px var(--success); }
-        .offline { background: var(--text-muted); }
+        .online { background: #22c55e; box-shadow: 0 0 5px #22c55e; }
+        .offline { background: #94a3b8; box-shadow: 0 0 5px #94a3b8; }
         .global-progress { margin-bottom: 20px; }
         .progress-container { background: #e2e8f0; height: 12px; border-radius: 6px; overflow: hidden; margin-top: 8px; position: relative; }
         .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: 0.2s; }
@@ -469,43 +468,29 @@
         .btn-ban { background: var(--warning); color: white; }
         .btn-delete { background: var(--danger); color: white; }
 
-        /* Premium Styles */
-        .card { background: var(--card-bg); backdrop-filter: blur(12px);
-            border: 1px solid var(--card-border); box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px var(--primary-glow); transition: all 0.3s; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 30px var(--primary-glow); }
-
+        /* Premium Additions */
         .circular-progress {
-            width: 160px; height: 160px; position: relative; margin: 20px auto;
-        }
-        .circular-progress svg { transform: rotate(-90deg); }
-        .circular-progress circle {
-            cx: 80; cy: 80; r: 70; fill: none; stroke-width: 12;
-        }
-        .circular-progress .bg { stroke: #111; }
-        .circular-progress .progress { stroke: var(--primary); stroke-linecap: round; stroke-dasharray: 440; stroke-dashoffset: 440; transition: stroke-dashoffset 1s ease; }
-        .circular-progress .text {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 2rem; font-weight: bold; color: var(--primary); text-shadow: 0 0 15px var(--primary-glow);
+            position: relative;
+            height: 120px;
+            width: 120px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary) 0% 0%, var(--bg) 0%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .streak-box {
-            text-align: center; padding: 15px; border-radius: 16px;
-            background: rgba(57,255,20,0.1); border: 1px solid var(--primary);
-            margin-bottom: 20px;
-        }
-        .streak-box i { font-size: 2rem; color: var(--primary); animation: pulse 2s infinite; }
-        @keyframes pulse { 0%,100% { opacity: 0.7; } 50% { opacity: 1; } }
-
-        .quote-box {
-            font-style: italic; color: var(--text-muted); text-align: center;
-            padding: 15px; background: rgba(0,0,0,0.3); border-radius: 12px; margin: 15px 0;
+        .circular-progress::before {
+            content: "";
+            position: absolute;
+            height: 100px;
+            width: 100px;
+            border-radius: 50%;
+            background: var(--card-bg);
         }
 
-        .badge {
-            display: inline-block; padding: 8px 16px; margin: 5px;
-            background: rgba(57,255,20,0.2); border: 1px solid var(--primary);
-            border-radius: 20px; font-size: 12px; color: var(--primary);
-            box-shadow: 0 0 10px var(--primary-glow);
+        .progress-value {
+            position: relative;
         }
     </style>
 </head>
@@ -565,7 +550,7 @@
             <input type="text" id="edit-name" placeholder="Enter your name">
         </div>
         <div class="input-group">
-            <label>Email (Not Changeable)</label>
+            <label>Email (Not Changeable</label>
             <input type="text" id="edit-email" disabled style="background: rgba(0,0,0,0.05); cursor: not-allowed; opacity: 0.7;">
         </div>
         <div class="input-group">
@@ -660,26 +645,14 @@
         </header>
 
         <div class="container">
-            <div class="streak-box" id="streak-box">
-                <h3 style="font-size:16px"><i class="fas fa-fire"></i> দৈনিক স্ট্রিক: <span id="streak-count">0</span> দিন</h3>
-            </div>
-
-            <div class="quote-box" id="quote-box">
-                <p id="motivational-quote" style="font-size:14px">প্রতিদিন একটু করে এগিয়ে যাও!</p>
-            </div>
-
             <div class="card global-progress">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <h3 style="font-size:16px"><i class="fas fa-chart-line"></i> সিলেবাস অগ্রগতি </h3>
+                    <h3 id="global-perc-text" style="color:var(--primary); font-size:18px">0%</h3>
                 </div>
-                <div class="circular-progress">
-                    <svg width="120" height="120">
-                        <circle class="bg" cx="60" cy="60" r="54" />
-                        <circle class="progress" id="global-progress-fill" cx="60" cy="60" r="54" />
-                    </svg>
-                    <div class="text" id="global-perc-text">0%</div>
+                <div class="progress-container">
+                    <div id="global-progress-fill" class="progress-fill" style="width: 0%"></div>
                 </div>
-                <div id="badges-container" style="display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:10px;"></div>
             </div>
 
             <div class="dashboard-grid">
@@ -813,8 +786,8 @@
         setTimeout(() => {
             app.classList.add('visible'); 
             loader.style.opacity = '0'; 
-            loader.style.visibility = 'hidden';
-        }, 3000); // Increased timeout to 3s for safety
+            setTimeout(() => loader.style.visibility = 'hidden', 600);
+        }, 1000);
     };
 
     function showPage(pageId) {
@@ -839,57 +812,24 @@
     }
 
     function handleRegister() {
-        const name = document.getElementById('reg-name').value.trim();
-        const email = document.getElementById('reg-email').value.trim();
+        if(localStorage.getItem('device_blocked')) return showPage('device-blocked-screen');
+        const name = document.getElementById('reg-name').value;
+        const email = document.getElementById('reg-email').value.replace(/\./g, '_'); 
         const pass = document.getElementById('reg-pass').value;
-        const gender = document.getElementById('reg-gender').value || 'male';
+        const gender = document.getElementById('reg-gender').value || 'male'; 
         
-        if (!name || !email || !pass) {
-            alert("সব তথ্য পূরণ করুন!");
-            return;
-        }
-        
-        const emailKey = email.replace(/\./g, '_');
-        const avatar = gender === 'female' 
-            ? 'https://cdn-icons-png.flaticon.com/512/6997/6997662.png'
-            : 'https://cdn-icons-png.flaticon.com/512/4140/4140037.png';
-        
-        // Check if user already exists
-        db.ref('users/' + emailKey).once('value')
-            .then(snapshot => {
-                if (snapshot.exists()) {
-                    alert("এই ইমেইলে ইতিমধ্যে account আছে!");
-                    return;
-                }
-                
-                // Create new user
-                const newUser = {
-                    id: emailKey,
-                    name: name,
-                    pass: pass,
-                    role: 'student',
-                    gender: gender,
-                    img: avatar,
-                    progress: 0,
-                    trackerData: {},
-                    isBanned: false,
-                    lastSeen: Date.now()
-                };
-                
-                // Save to Firebase
-                return db.ref('users/' + emailKey).set(newUser);
-            })
-            .then(() => {
-                alert("রেজিস্ট্রেশন সফল! এখন লগিন করুন।");
-                showPage('login-page');
-                // Auto-fill login form
-                document.getElementById('login-email').value = email;
-                document.getElementById('login-pass').value = pass;
-            })
-            .catch(error => {
-                console.error("Registration error:", error);
-                alert("রেজিস্ট্রেশন error: " + error.message);
+        const maleAvatar = "https://cdn-icons-png.flaticon.com/512/4140/4140037.png";
+        const femaleAvatar = "https://cdn-icons-png.flaticon.com/512/6997/6997662.png";
+        const img = gender === 'female' ? femaleAvatar : maleAvatar;
+
+        if(!name || !email || !pass) return alert("সব তথ্য দিন!");
+        db.ref('users/' + email).once('value', snapshot => {
+            if(snapshot.exists()) return alert("ইমেইলটি নিবন্ধিত!");
+            const userData = { id: email, name, pass, role: 'student', gender, img, progress: 0, trackerData: {}, isBanned: false, lastSeen: Date.now() };
+            db.ref('users/' + email).set(userData).then(() => {
+                alert("সফল!"); showPage('login-page');
             });
+        });
     }
 
     function handleLogin() {
@@ -897,11 +837,6 @@
         const loginEmail = document.getElementById('login-email').value;
         const pass = document.getElementById('login-pass').value;
         const emailKey = loginEmail.replace(/\./g, '_');
-
-        if (!loginEmail || !pass) {
-            alert("ইমেইল এবং পাসওয়ার্ড দিন!");
-            return;
-        }
 
         if (loginEmail === "teacher20189@gmail.com" && pass === "teacher20189@gmail.com") {
             currentUser = { id: emailKey, name: "Teacher", role: 'teacher', gender: 'male', progress: 0 };
@@ -917,16 +852,11 @@
                 currentUser = user;
                 localStorage.setItem('hsc_uid', emailKey);
                 initDashboard();
-            } else { 
-                alert("ভুল ইমেইল বা পাসওয়ার্ড!"); 
-            }
-        }).catch(error => {
-            console.error("Login error:", error);
-            alert("লগিন error! Firebase connection check করুন।");
+            } else { alert("ভুল পাসওয়ার্ড!"); }
         });
     }
 
-    function handleLogout() { localStorage.removeItem('hsc_uid'); location.reload(); }
+    function handleLogout() { localStorage.removeItem('hsc_uid'); localStorage.removeItem('master_auth'); location.reload(); }
     function confirmLogout() { document.getElementById('logoutModal').style.display = 'flex'; }
     function closeLogoutModal() { document.getElementById('logoutModal').style.display = 'none'; }
 
@@ -978,7 +908,7 @@
             if(currentUser.role === 'teacher') {
                 document.getElementById('student-tracker-card').classList.add('hidden');
                 document.getElementById('teacher-panel').classList.remove('hidden');
-                document.querySelector('.global-progress').classList.add('hidden');
+                document.querySelector('.global-progress').classList.add('hidden'); // Removed Syllabus Progress for Admin
                 document.getElementById('admin-summary-controls').classList.remove('hidden');
             } else {
                 document.getElementById('student-tracker-card').classList.remove('hidden');
@@ -989,8 +919,6 @@
         }
         renderSubjectBtns(); updateGlobalUI();
         setInterval(() => { if(currentUser && currentUser.role !== 'teacher') db.ref('users/' + currentUser.id + '/lastSeen').set(Date.now()); }, 5000); 
-        updateStreak();
-        updateQuote();
     }
 
     // --- Admin Control Functions ---
@@ -1027,8 +955,9 @@
         msg.innerText = `আপনি কি ${user.name}-কে ওয়েবসাইট থেকে ডিলিট করে দিতে চান? এই ইউজার এই ডিভাইস থেকে আর কখনোই ঢুকতে পারবে না।`;
         
         yesBtn.onclick = () => {
+            // Store blocked status in device and Firebase blacklist (simulated)
             db.ref('users/' + uid).remove().then(() => {
-                alert("ইউজার সফলভাবে ডিলিট করা হয়েছে।");
+                alert("ইউজার সফলভাবে ডিলিট এবং ডিভাইস ব্লক করা হয়েছে।");
                 closeAdminConfirm();
                 closeSummary();
             });
@@ -1044,7 +973,7 @@
             const perc = calculateSubjectProgress(sub, currentUser);
             const btn = document.createElement('div');
             btn.className = `subject-btn ${selectedSub === sub ? 'active' : ''}`;
-            btn.innerHTML = `<div style="font-weight:bold; font-size:15px; margin-bottom:2px;">\( {perc.toFixed(0)}%</div><span style="font-size:12px"> \){sub}</span><div class="prog-mini-bar" style="width: ${perc}%"></div>`;
+            btn.innerHTML = `<div style="font-weight:bold; font-size:15px; margin-bottom:2px;">\( {sub}</div><div style="font-size:12px"> \){perc.toFixed(0)}%</div><div class="prog-mini-bar" style="width: ${perc}%"></div>`;
             btn.onclick = () => selectSubject(sub);
             container.appendChild(btn);
         });
@@ -1111,7 +1040,7 @@
         currentUser.trackerData[key][index].parts = currentParts;
         currentUser.trackerData[key][index].done = currentParts.k && currentParts.kh && currentParts.g && currentParts.gh;
         updateGlobalUI();
-        db.ref('users/' + currentUser.id).update(currentUser).then(() => renderChapters());
+        db.ref('users/' + currentUser.id).update(currentUser).then(() => renderChapters()).catch(err => console.error(err));
     }
 
     function toggleChapter(index, isDone) {
@@ -1122,7 +1051,7 @@
         currentUser.trackerData[key][index].done = isDone;
         if(isDone) currentUser.trackerData[key][index].parts = { k: true, kh: true, g: true, gh: true };
         updateGlobalUI();
-        db.ref('users/' + currentUser.id).update(currentUser).then(() => renderChapters());
+        db.ref('users/' + currentUser.id).update(currentUser).then(() => renderChapters()).catch(err => console.error(err));
     }
 
     function bulkCheck(status) { 
@@ -1132,7 +1061,7 @@
         if(!currentUser.trackerData[key]) currentUser.trackerData[key] = {};
         chapters.forEach((_, i) => { currentUser.trackerData[key][i] = { done: status, parts: { k: status, kh: status, g: status, gh: status } }; });
         updateGlobalUI();
-        db.ref('users/' + currentUser.id).update(currentUser).then(() => renderChapters());
+        db.ref('users/' + currentUser.id).update(currentUser).then(() => renderChapters()).catch(err => console.error(err));
     }
 
     function updatePaperUI() {
@@ -1155,7 +1084,7 @@
             if(data) {
                 if(subList.includes(sub)) {
                     const parts = data.parts || { k: false, kh: false, g: false, gh: false };
-                    if(parts.k) score += 0.25; if(parts.kh) score += 0.25; if(parts.g) score += 0.25; if(parts.gh) score += 0.25;
+                    score += (parts.k + parts.kh + parts.g + parts.gh) * 0.25;
                 } else if(data.done) score += 1;
             }
         });
@@ -1178,13 +1107,13 @@
         const globalText = document.getElementById('global-perc-text');
         if(globalText) globalText.innerText = (avgRaw % 1 === 0 ? avgRaw.toFixed(0) : avgRaw.toFixed(1)) + "%";
         const globalFill = document.getElementById('global-progress-fill');
-        if(globalFill) globalFill.style.strokeDashoffset = 440 - (440 * (avgRaw / 100));
+        if(globalFill) globalFill.style.width = avgRaw + "%";
         const miniBars = document.querySelectorAll('.prog-mini-bar');
         Object.keys(syllabusData).forEach((sub, idx) => {
             const subPerc = calculateSubjectProgress(sub, currentUser);
             if(miniBars[idx]) miniBars[idx].style.width = subPerc + "%";
         });
-        updateBadges();
+        db.ref('users/' + currentUser.id).update({progress: currentUser.progress});
     }
 
     function renderLeaderboard() {
@@ -1213,7 +1142,7 @@
                     <img src="${avatar}" class="leader-img" style="width:35px; height:35px; border-radius:50%; object-fit:cover;">
                     <div><div style="font-size:13px; font-weight:600">${u.name} ${currentUser && u.id === currentUser.id ? '(You)' : ''}</div>
                     <div style="font-size:9px; display:flex; align-items:center; gap:4px">
-                    <span class="status-dot \( {isOnline ? 'online' : 'offline'}"></span> \){isOnline ? 'Active' : 'Offline'}</div></div></div>
+                    <span class="status-dot \( {isOnline ? 'online' : 'offline'}"></span> \){isOnline ? 'অনলাইন' : 'অফলাইন'}</div></div></div>
                 <div style="text-align:right"><div style="font-weight:bold; color:var(--primary); font-size:14px">${u.progress}%</div>
                 ${u.isBanned ? '<span style="color:var(--danger); font-size:9px; font-weight:bold;">BANNED</span>' : ''}</div>`;
             list.appendChild(div);
@@ -1296,64 +1225,6 @@
         localStorage.setItem('dark_mode', document.body.classList.contains('dark'));
     }
 
-    // Premium Features
-    const quotes = [
-        "যারা কঠোর পরিশ্রম করে, তারাই সফল হয়। তুমি পারবে!",
-        "প্রতিদিন একটু একটু করে এগিয়ে যাও। সাফল্য তোমার অপেক্ষায় আছে।",
-        "আজকের পরিশ্রমই কালকের স্বপ্ন পূরণ করবে।",
-        "তুমি যতটা ভাবো তার চেয়ে অনেক বেশি সক্ষম।"
-    ];
-
-    function updateStreak() {
-        const today = new Date().toDateString();
-        const lastLogin = localStorage.getItem('last_login');
-        let streak = parseInt(localStorage.getItem('streak') || '0');
-
-        if (lastLogin === today) {
-            // Already logged in today
-        } else if (lastLogin) {
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-            if (lastLogin === yesterday.toDateString()) {
-                streak++;
-            } else {
-                streak = 1;
-            }
-        } else {
-            streak = 1;
-        }
-
-        localStorage.setItem('last_login', today);
-        localStorage.setItem('streak', streak);
-        const streakCount = document.getElementById('streak-count');
-        if (streakCount) streakCount.innerText = streak;
-    }
-
-    function updateQuote() {
-        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-        const quoteElement = document.getElementById('motivational-quote');
-        if (quoteElement) quoteElement.innerText = randomQuote;
-    }
-
-    function updateBadges() {
-        const container = document.getElementById('badges-container');
-        if (!container) return;
-        container.innerHTML = "";
-        const progress = currentUser?.progress || 0;
-
-        if (progress >= 50) container.innerHTML += '<span class="badge">🏆 50% Warrior</span>';
-        if (progress >= 80) container.innerHTML += '<span class="badge">💎 80% Master</span>';
-        if (progress === 100) container.innerHTML += '<span class="badge">🌟 Full Complete!</span>';
-
-        // Subject specific
-        Object.keys(syllabusData).forEach(sub => {
-            const subProg = calculateSubjectProgress(sub, currentUser);
-            if (subProg >= 100) {
-                container.innerHTML += `<span class="badge">📚 ${sub} Complete!</span>`;
-            }
-        });
-    }
-
     (function instantLoad() {
         if (localStorage.getItem('device_blocked')) return showPage('device-blocked-screen');
         if (localStorage.getItem('dark_mode') === 'true') { document.body.classList.add('dark'); document.documentElement.classList.add('dark'); }
@@ -1368,10 +1239,14 @@
                 if(currentUser) { if(currentUser.isBanned) showPage('banned-screen'); else initDashboard(); }
                 else { localStorage.removeItem('hsc_uid'); showPage('login-page'); }
                 finalizePage();
+            }).catch(err => {
+                console.error(err);
+                showPage('login-page');
+                finalizePage();
             });
         } else { showPage('login-page'); finalizePage(); }
     })();
 </script>
 
 </body>
-    </html>
+                        </html>
