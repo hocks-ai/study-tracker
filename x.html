@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tahosin Study Tracker - Premium Dashboard</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;600;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+    <style>
+        :root {
+            --primary: #39ff14;      /* Neon Green */
+            --primary-glow: #39ff14aa;
+            --accent: #00ff9d;
+            --success: #00ff80;
+            --danger: #ff2d55;
+            --warning: #ffd000;
+            --bg: #0a0a0a;
+            --card-bg: rgba(15, 15, 15, 0.7);
+            --card-border: rgba(57, 255, 20, 0.3);
+            --text-main: #e0e0e0;
+            --text-muted: #888888;
+        }
+
+        html { background: linear-gradient(135deg, #000000, #0f1a0f); min-height: 100vh; }
+        html.dark { background: linear-gradient(135deg, #000000, #0a0f0a); }
+
+        body.dark {
+            --bg: #000000;
+            --card-bg: rgba(10, 15, 10, 0.8);
+            --text-main: #ffffff;
+            --text-muted: #aaaaaa;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            font-family: 'Hind Siliguri', 'Poppins', sans-serif; 
+            background: var(--bg); 
+            color: var(--text-main);
+            transition: all 0.4s ease;
+            overflow-x: hidden;
+        }
+
+        #page-loader {
+            position: fixed; inset: 0; background: #000; z-index: 999999;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .loader {
+            width: 60px; height: 60px;
+            border: 6px solid #111;
+            border-top: 6px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            box-shadow: 0 0 30px var(--primary-glow);
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        #app { opacity: 0; transition: opacity 0.8s ease; }
+        #app.visible { opacity: 1; }
+
+        .hidden { display: none !important; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+        .auth-screen { min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .auth-card { 
+            background: var(--card-bg); backdrop-filter: blur(12px);
+            padding: 50px; border-radius: 24px; 
+            border: 1px solid var(--card-border);
+            box-shadow: 0 0 40px var(--primary-glow);
+            width: 100%; max-width: 480px; text-align: center;
+        }
+        .auth-card h2 { margin-bottom: 30px; color: var(--primary); font-size: 2rem; text-shadow: 0 0 10px var(--primary-glow); }
+
+        .input-group input, .input-group select { 
+            background: rgba(0,0,0,0.4); border: 1px solid var(--primary);
+            color: white; padding: 14px; border-radius: 12px;
+            transition: all 0.3s;
+        }
+        .input-group input:focus { box-shadow: 0 0 15px var(--primary-glow); outline: none; }
+
+        button { 
+            cursor: pointer; border: none; border-radius: 12px; 
+            font-weight: 600; padding: 14px;
+            background: var(--primary); color: black;
+            box-shadow: 0 0 20px var(--primary-glow);
+            transition: all 0.3s;
+        }
+        button:hover { transform: translateY(-3px); box-shadow: 0 0 30px var(--primary-glow); }
+
+        header { 
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(10px);
+            color: white; padding: 18px 30px; 
+            border-radius: 0 0 24px 24px; 
+            border-bottom: 1px solid var(--card-border);
+            box-shadow: 0 4px 20px rgba(57,255,20,0.2);
+        }
+
+        .card { 
+            background: var(--card-bg); backdrop-filter: blur(12px);
+            padding: 24px; border-radius: 20px; 
+            border: 1px solid var(--card-border);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px var(--primary-glow);
+            margin-bottom: 24px;
+            transition: all 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 30px var(--primary-glow); }
+
+        .subject-btn { 
+            background: rgba(0,0,0,0.4); border: 2px solid var(--primary);
+            border-radius: 16px; padding: 16px;
+            transition: all 0.3s; position: relative; overflow: hidden;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+        .subject-btn:hover { transform: scale(1.05); box-shadow: 0 0 25px var(--primary-glow); }
+        .subject-btn.active { background: var(--primary); color: black !important; box-shadow: 0 0 30px var(--primary-glow); }
+
+        .prog-mini-bar { background: linear-gradient(90deg, var(--primary), var(--accent)); height: 5px; }
+
+        .tab { 
+            background: rgba(0,0,0,0.4); border: 2px solid var(--primary);
+            border-radius: 12px; padding: 12px 20px;
+            transition: all 0.3s; box-shadow: 0 0 10px var(--primary-glow);
+        }
+        .tab.active { background: var(--primary); color: black; box-shadow: 0 0 25px var(--primary-glow); }
+
+        .progress-fill { background: linear-gradient(90deg, var(--primary), var(--accent)); box-shadow: 0 0 15px var(--primary-glow); }
+
+        /* Circular Progress */
+        .circular-progress {
+            width: 160px; height: 160px; position: relative; margin: 20px auto;
+        }
+        .circular-progress svg { transform: rotate(-90deg); }
+        .circular-progress circle {
+            cx: 80; cy: 80; r: 70; fill: none; stroke-width: 12;
+        }
+        .circular-progress .bg { stroke: #111; }
+        .circular-progress .progress { stroke: var(--primary); stroke-linecap: round; stroke-dasharray: 440; stroke-dashoffset: 440; transition: stroke-dashoffset 1s ease; }
+        .circular-progress .text {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 2rem; font-weight: bold; color: var(--primary); text-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        /* Streak & Quote */
+        .streak-box {
+            text-align: center; padding: 15px; border-radius: 16px;
+            background: rgba(57,255,20,0.1); border: 1px solid var(--primary);
+            margin-bottom: 20px;
+        }
+        .streak-box i { font-size: 2rem; color: var(--primary); animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100% { opacity: 0.7; } 50% { opacity: 1; } }
+
+        .quote-box {
+            font-style: italic; color: var(--text-muted); text-align: center;
+            padding: 15px; background: rgba(0,0,0,0.3); border-radius: 12px; margin: 15px 0;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block; padding: 8px 16px; margin: 5px;
+            background: rgba(57,255,20,0.2); border: 1px solid var(--primary);
+            border-radius: 20px; font-size: 12px; color: var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+    </style>
+</head>
+<body>
+
+<div id="page-loader"><div class="loader"></div></div>
+
+<!-- Modals same as before (admin, summary, logout, profile) - keeping them unchanged for space -->
+
+<div id="summaryModal" class="modal"> <!-- unchanged --> ... </div>
+<div id="adminConfirmModal" class="modal"> <!-- unchanged --> ... </div>
+<div id="logoutModal" class="modal"> <!-- unchanged --> ... </div>
+<div id="profileModal" class="modal"> <!-- unchanged --> ... </div>
+
+<div id="app">
+    <!-- Login & Register pages unchanged -->
+
+    <div id="dashboard-page" class="hidden">
+        <header>
+            <div class="header-profile" id="header-user-info">
+                <i class="fas fa-graduation-cap" style="font-size:1.8rem; color:var(--primary); text-shadow:0 0 10px var(--primary-glow);"></i>
+                <div id="welcome-text" style="display:flex; align-items:center; gap:12px;"></div>
+            </div>
+            <div class="nav-btns">
+                <div class="dropdown">
+                    <button onclick="toggleMenu()" class="menu-trigger" style="background:rgba(255,255,255,0.1); box-shadow:0 0 15px var(--primary-glow);">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div id="dropdown-menu" class="dropdown-content">
+                        <button onclick="openProfileModal()"><i class="fas fa-user-circle"></i> My Profile</button>
+                        <button onclick="toggleDarkMode()"><i class="fas fa-moon"></i> ডার্ক মোড</button>
+                        <button onclick="confirmLogout()" class="logout-item"><i class="fas fa-sign-out-alt"></i> লগআউট</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+            <!-- Streak + Quote + Badges -->
+            <div class="card streak-box">
+                <h3>🔥 Daily Streak: <span id="streak-count">0</span> দিন</h3>
+                <i class="fas fa-fire"></i>
+            </div>
+
+            <div class="card quote-box">
+                <p id="motivational-quote">"যারা কঠোর পরিশ্রম করে, তারাই সফল হয়। তুমি পারবে!"</p>
+            </div>
+
+            <div class="card" style="text-align:center;">
+                <h3 style="margin-bottom:15px; color:var(--primary); text-shadow:0 0 10px var(--primary-glow);">সিলেবাস অগ্রগতি</h3>
+                <div class="circular-progress">
+                    <svg width="160" height="160">
+                        <circle class="bg" />
+                        <circle class="progress" id="circular-progress-ring" />
+                    </svg>
+                    <div class="text" id="global-perc-text">0%</div>
+                </div>
+                <div id="badges-container" style="margin-top:20px;"></div>
+            </div>
+
+            <!-- Rest of dashboard unchanged -->
+            <div class="dashboard-grid">
+                <!-- left & right panel same -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Firebase config same as yours
+    const firebaseConfig = { /* তোর config */ };
+
+    // ... (all previous variables and functions)
+
+    // New Premium Features
+    const quotes = [
+        "যারা কঠোর পরিশ্রম করে, তারাই সফল হয়। তুমি পারবে!",
+        "প্রতিদিন একটু একটু করে এগিয়ে যাও। সাফল্য তোমার অপেক্ষায় আছে।",
+        "আজকের পরিশ্রমই কালকের স্বপ্ন পূরণ করবে।",
+        "তুমি যতটা ভাবো তার চেয়ে অনেক বেশি সক্ষম।"
+    ];
+
+    function updateStreak() {
+        const today = new Date().toDateString();
+        const lastLogin = localStorage.getItem('last_login');
+        let streak = parseInt(localStorage.getItem('streak') || '0');
+
+        if (lastLogin === today) {
+            // Already logged in today
+        } else if (lastLogin) {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            if (lastLogin === yesterday.toDateString()) {
+                streak++;
+            } else {
+                streak = 1;
+            }
+        } else {
+            streak = 1;
+        }
+
+        localStorage.setItem('last_login', today);
+        localStorage.setItem('streak', streak);
+        document.getElementById('streak-count').innerText = streak;
+    }
+
+    function updateQuote() {
+        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        document.getElementById('motivational-quote').innerText = randomQuote;
+    }
+
+    function updateCircularProgress(perc) {
+        const ring = document.getElementById('circular-progress-ring');
+        const offset = 440 - (440 * perc / 100);
+        ring.style.strokeDashoffset = offset;
+        document.getElementById('global-perc-text').innerText = perc.toFixed(0) + "%";
+    }
+
+    function updateBadges() {
+        const container = document.getElementById('badges-container');
+        container.innerHTML = "";
+        const progress = currentUser?.progress || 0;
+
+        if (progress >= 50) {
+            container.innerHTML += '<span class="badge">🏆 50% Warrior</span>';
+        }
+        if (progress >= 80) {
+            container.innerHTML += '<span class="badge">💎 80% Master</span>';
+        }
+        if (progress === 100) {
+            container.innerHTML += '<span class="badge">🌟 Full Complete!</span>';
+        }
+
+        // Subject specific
+        Object.keys(syllabusData).forEach(sub => {
+            const subProg = calculateSubjectProgress(sub, currentUser);
+            if (subProg >= 100) {
+                container.innerHTML += `<span class="badge">📚 ${sub} Complete!</span>`;
+            }
+        });
+    }
+
+    // Override updateGlobalUI
+    function updateGlobalUI() {
+        if(!currentUser) return;
+        let totalScore = 0;
+        const subs = Object.keys(syllabusData);
+        subs.forEach(s => totalScore += calculateSubjectProgress(s, currentUser));
+        const avgRaw = totalScore / subs.length;
+        currentUser.progress = parseFloat(avgRaw.toFixed(2));
+
+        updateCircularProgress(avgRaw);
+        updateBadges();
+
+        // Mini bars
+        const miniBars = document.querySelectorAll('.prog-mini-bar');
+        Object.keys(syllabusData).forEach((sub, idx) => {
+            const subPerc = calculateSubjectProgress(sub, currentUser);
+            if(miniBars[idx]) miniBars[idx].style.width = subPerc + "%";
+        });
+    }
+
+    // In initDashboard()
+    function initDashboard() {
+        // ... previous code
+        updateStreak();
+        updateQuote();
+        updateGlobalUI();
+        // ...
+    }
+
+    // instantLoad same, just call update functions after login
+    (function instantLoad() {
+        // ... previous
+        if(currentUser) {
+            updateStreak();
+            updateQuote();
+        }
+        finalizePage();
+    })();
+</script>
+</body>
+</html>
